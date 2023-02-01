@@ -47,8 +47,7 @@ function App() {
     const filterFunction = (valueFilter: FilterType, _id:string) => {
     let newTodolist = todoLists.find( t => t.id === _id)
         if(newTodolist) {
-            newTodolist.filter = valueFilter
-        }
+            newTodolist.filter = valueFilter }
         setTodoLists([...todoLists])
     }
 
@@ -96,7 +95,8 @@ function App() {
                         filter={tl.filter}
                         todoListsId = { tl.id}
                         removeTodoList = {removeTodoList}
-                    />)
+                    />
+                )
             })}
         </div>
     );
