@@ -6,17 +6,17 @@
 .App > div {
   margin-right: 50px;
 }
-
 .error {
   border: red 1px solid;
 }
-.error-message {
-color: red;
+.error-massage {
+  color: red;
 }
-.activeFilter {
-background-color: pink;
-}
-.isDoneStatus{
-  opacity: 0.5;
 
+.isDone {
+  opacity: 0.5;
+}
+
+.activeFilter {
+  background-color: aquamarine;
 }
