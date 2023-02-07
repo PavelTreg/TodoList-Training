@@ -1,20 +1,22 @@
 import React, {ChangeEvent} from 'react';
 import {FilterType} from "../App";
 import AddItemForm from "./AddItemForm";
+import {EditableSpan} from "./EditableSpan";
+
 
 type PropsType = {
     name: string
     tasks: Array<TaskType>
-    filterFunction: (filterValue: FilterType, todoListId: string) => void
-    removeTask: (_id: string, todoListId: string) => void
-    addTask: (value: string, todoListId: string) => void
-    changeStatus: (checked: boolean, _id: string, todoListId: string) => void
+    filterFunction: (filterValue: FilterType, todolistId: string) => void
+    removeTask: (_id: string, todolistId: string) => void
+    addTask: (value: string, todolistId: string) => void
+    changeStatus: (checked: boolean, _id: string, todolistId: string) => void
     filter: string
-    todoListId: string
-    removeTodoList: (todoListId: string) => void
+    todolistId: string
+    removeTodolist: (todoListId: string) => void
 }
 
-type TaskType = {
+export type TaskType = {
     id: string,
     name: string,
     isDone: boolean
@@ -23,37 +25,36 @@ export const Todolist = (props: PropsType) => {
 
 
 
-
     const onClickAll = () => {
-        props.filterFunction('All', props.todoListId)
+        props.filterFunction('All', props.todolistId)
     }
     const onClickActive = () => {
-        props.filterFunction('Active', props.todoListId)
+        props.filterFunction('Active', props.todolistId)
     }
     const onClickCompleted = () => {
-        props.filterFunction('Completed', props.todoListId)
+        props.filterFunction('Completed', props.todolistId)
     }
 
-
-    const onClickRemoveTodolist = () => {
-        props.removeTodoList(props.todoListId)
+    const addTask = (value: string) => {
+        props.addTask(value, props.todolistId)
     }
+
 
     return (
         <div>
             <div>
                 <h3>{props.name}
-                    <button onClick={onClickRemoveTodolist}>X</button>
+                <button onClick={() => props.removeTodolist(props.todolistId)}>X</button>
                 </h3>
-
-               <AddItemForm addTask={props.addTask} todoListId={props.todoListId}/>
+               <AddItemForm addItem = {addTask}
+                            />
                 <ul>
                     {props.tasks.map(t => {
                         const onClickRemoveTask = () => {
-                            props.removeTask(t.id, props.todoListId)
+                            props.removeTask(t.id, props.todolistId)
                         }
                         const onChangeChecked = (e: ChangeEvent<HTMLInputElement>) => {
-                            props.changeStatus(e.currentTarget.checked, t.id, props.todoListId)
+                            props.changeStatus(e.currentTarget.checked, t.id, props.todolistId)
                         }
 
                         return (<li className={t.isDone ? 'isDone' : ''}>
@@ -61,7 +62,8 @@ export const Todolist = (props: PropsType) => {
                                        checked={t.isDone}
                                        onChange={onChangeChecked}
                                 />
-                                <span>{t.name}</span>
+                               <EditableSpan title={t.name} editMode = {true}/>
+
                                 <button onClick={onClickRemoveTask}> x</button>
                             </li>
                         )
