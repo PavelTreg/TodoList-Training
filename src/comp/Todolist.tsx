@@ -1,6 +1,7 @@
 import React, {ChangeEvent} from 'react';
 import {FilterType} from "../App";
-import {AddItem} from "./AppItem";
+import {AddItemInput} from "./AddItemInput";
+import {EditableSpan} from "./EditableSpan";
 
 type PropsType = {
     name: string
@@ -11,7 +12,11 @@ type PropsType = {
     changeStatus: (checked: boolean, _id: string, todolistId: string) => void
     filter: string
     todolistId: string
+    removeTodoList: (todolistId: string) => void
+    changeNameTask: (valueSpanInput: string, id: string, todolistId:string) => void
+    changeNameTodolist: (valueSpanInput: string, todolistId:string) => void
 }
+
 
 export type TaskType = {
     id: string,
@@ -19,7 +24,6 @@ export type TaskType = {
     isDone: boolean
 }
 export const Todolist = (props: PropsType) => {
-
 
 
 
@@ -33,15 +37,18 @@ export const Todolist = (props: PropsType) => {
         props.filterFunction('Completed', props.todolistId)
     }
 
+    const onClickRemoveTodo = () => props.removeTodoList(props.todolistId)
 
-const addTask = (value: string) => {props.addTask(value, props.todolistId) }
-
-
+    const addTask = (value: string) => { props.addTask(value,props.todolistId)}
     return (
         <div>
             <div>
-                <h3>{props.name}</h3>
-              <AddItem addTask={addTask}/>
+                <h3>
+                <EditableSpan title={props.name} onchange={(valueSpanInput) => {props.changeNameTodolist(valueSpanInput,props.todolistId)}}/>
+                <button onClick={onClickRemoveTodo}> X </button>
+                </h3>
+
+<AddItemInput addItem={addTask}/>
                 <ul>
                     {props.tasks.map(t => {
                         const onClickRemoveTask = () => {
@@ -50,13 +57,15 @@ const addTask = (value: string) => {props.addTask(value, props.todolistId) }
                         const onChangeChecked = (e: ChangeEvent<HTMLInputElement>) => {
                             props.changeStatus(e.currentTarget.checked, t.id, props.todolistId)
                         }
-
+const changeNameTask  = (valueSpanInput: string) => {props.changeNameTask(valueSpanInput, t.id, props.todolistId)}
                         return (<li className={t.isDone ? 'isDone' : ''}>
                                 <input type='checkbox'
                                        checked={t.isDone}
                                        onChange={onChangeChecked}
                                 />
-                                <span>{t.name}</span>
+
+                           < EditableSpan title = {t.name} onchange = {changeNameTask}/>
+
                                 <button onClick={onClickRemoveTask}> x</button>
                             </li>
                         )
